@@ -1,2 +1,15 @@
-.venv/
-visualizer/__pycache__/
+# Django #
+*.log
+*.pyc
+__pycache__
+media
+
+# pyenv 
+.python-version 
+
+# Environments 
+.env 
+.venv 
+
+# Visual Studio Code # 
+.vscode/*
