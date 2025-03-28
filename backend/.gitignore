@@ -13,3 +13,4 @@ media
 
 # Visual Studio Code # 
 .vscode/*
+.idea/*
