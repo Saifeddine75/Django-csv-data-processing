@@ -1,5 +1,5 @@
 
 Django>=3.2,<4.0
 psycopg2-binary>=2.8
-django-debug-toolbar
+django-debug-toolbar>=4.3
 # Add other dependencies as needed

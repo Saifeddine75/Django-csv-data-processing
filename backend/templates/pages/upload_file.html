@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataset Plot</title>
+    <!-- Include Highcharts library -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <style>
+        #chart-container {
+            width: 80%;
+            height: 500px;
+            margin: auto;
+            display: none;
+        }
+        .selected {
+            font-weight: bold;
+            color: green;
+        }
+    </style>
+</head>
+
+
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+
+    <h1>Upload a File</h1>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload</button>
+    </form>
+
+    <hr>
+
+    <h2>Uploaded Files</h2>
+    {% if uploaded_files %}
+        <ul>
+            {% for file in uploaded_files %}
+                <li>{{ file }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No files uploaded yet.</p>
+    {% endif %}
+
+    {% if datasets %}
+    <h3>Select a Dataset:</h3>
+    <form method="get">
+        <select name="dataset_id" onchange="this.form.submit()">
+            <option value="">-- Select Dataset --</option>
+            {% for dataset in datasets %}
+                <option value="{{ dataset.id }}" {% if dataset.id == selected_dataset.id %}selected{% endif %}>
+                    {{ dataset.title }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <ul>
+        {% for dataset in datasets %}
+            <li class="{% if dataset.id == selected_dataset.id %}selected{% endif %}">
+                {{ dataset.title }}
+            </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <button id="show-plot">Show Plots</button>
+    <h1>{{ chart.title }}</h1>
+
+    <div id="chart-container"></div>
+
+    <div id="container" style="width:100%; height:400px;"></div>
+
+    <div class="chart-container">
+        <!-- Highcharts container -->
+        <canvas id="canvas" height="450" width="600">
+            <div id="chart"></div>  
+        </canvas>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var chartData = JSON.parse('{{ chart_data|escapejs }}');
+                var stats = {{ stats|safe }};  // Access stats
+    
+                if (chartData) {
+                    Highcharts.chart('chart-container',
+                    {
+                        options: {
+                            responsive: true,
+                            scales: {
+                                x: {
+                                    type: 'linear',
+                                    position: 'bottom',
+                                    min: stats.axis.x.min,  // Set min value for x-axis
+                                    max: stats.axis.x.max,  // Set max value for x-axis
+                                    title: {
+                                        display: true,
+                                        text: 'Timestamps'
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value.toFixed(2);  // Format tick labels as float
+                                        }
+                                    }
+                                },
+                                y: {
+                                    min: stats.axis.y.min,  // Set min value for y-axis
+                                    max: stats.axis.y.max,  // Set max value for y-axis
+                                    title: {
+                                        display: true,
+                                        text: 'Values'
+                                    },
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value.toFixed(2);  // Format tick labels as float
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        chart: { type: 'line' },
+                        title: { text: 'Dataset Visualization' },
+                        xAxis: { 
+                            title: { text: 'Timestamps' },
+                            labels: {
+                                formatter: function() {
+                                    return this.value.toFixed(2); // Display timestamps as float
+                                }
+                            }
+                        },
+                        yAxis: { 
+                            title: { text: 'Values' },
+                            min: Math.min(...chartData.series.flatMap(s => s.data.map(point => point[1]))), // Auto min
+                            max: Math.max(...chartData.series.flatMap(s => s.data.map(point => point[1]))), // Auto max
+                            labels: {
+                                formatter: function() {
+                                    return this.value.toFixed(2); // Display timestamps as float
+                                }
+                            }
+                        },
+                        series: chartData.series
+                    });
+                    document.getElementById("show-plot").addEventListener("click", function() {
+                        document.getElementById("chart-container").style.display = "block";
+                    });
+                }
+            });
+        </script>
+    </div>
+
+    
+</body>
+</html>
+    
+
+    {% comment %} <h1>File: {{ file.file_name }}</h1>
+    <p>Uploaded at: {{ file.uploaded_at }}</p>
+
+    <h2>Statistics:</h2>
+    <h3>X-Axis</h3>
+    <ul>
+        <li>Min: {{ dataset.min_x }}</li>
+        <li>Max: {{ dataset.max_x }}</li>
+        <li>Mean: {{ dataset.mean_x }}</li>
+        <li>Median: {{ dataset.median_x }}</li>
+        <li>Standard Deviation: {{ dataset.std_x }}</li>
+    </ul>
+
+    <h3>Y-Axis</h3>
+    <ul>
+        <li>Min: {{ dataset.min_y }}</li>
+        <li>Max: {{ dataset.max_y }}</li>
+        <li>Mean: {{ dataset.mean_y }}</li>
+        <li>Median: {{ dataset.median_y }}</li>
+        <li>Standard Deviation: {{ dataset.std_y }}</li>
+    </ul>
+
+    <h3>Z-Axis</h3>
+    <ul>
+        <li>Min: {{ dataset.min_z }}</li>
+        <li>Max: {{ dataset.max_z }}</li>
+        <li>Mean: {{ dataset.mean_z }}</li>
+        <li>Median: {{ dataset.median_z }}</li>
+        <li>Standard Deviation: {{ dataset.std_z }}</li>
+    </ul>
+
+    <h3>Norm</h3>
+    <ul>
+        <li>Min: {{ dataset.min_norm }}</li>
+        <li>Max: {{ dataset.max_norm }}</li>
+        <li>Mean: {{ dataset.mean_norm }}</li>
+        <li>Median: {{ dataset.median_norm }}</li>
+        <li>Standard Deviation: {{ dataset.std_norm }}</li>
+    </ul>
+
+    <h2>Plot:</h2>
+    <canvas id="plot" width="400" height="200"></canvas>
+    <script>
+        var ctx = document.getElementById('plot').getContext('2d');
+        var plotData = {
+            labels: ['X', 'Y', 'Z', 'Norm'],
+            datasets: [{
+                label: 'Values',
+                data: [
+                    {{ dataset.mean_x }},
+                    {{ dataset.mean_y }},
+                    {{ dataset.mean_z }},
+                    {{ dataset.mean_norm }}
+                ],
+                backgroundColor: ['red', 'green', 'blue', 'purple'],
+                borderColor: ['red', 'green', 'blue', 'purple'],
+                borderWidth: 1
+            }]
+        };
+        
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: plotData
+        });
+    </script>
+</body>
+</html> {% endcomment %}
