@@ -1,0 +1,111 @@
+{% load static %}
+{% load i18n %}
+
+
+{% block javascript %}
+  {# JQUERY FILE UPLOAD SCRIPTS #}
+  <script src="{{BASE_URL}}{% static 'js/jquery-file-upload/vendor/jquery.ui.widget.js' %}"></script>
+  <script src="{{BASE_URL}}{% static 'js/jquery-file-upload/jquery.iframe-transport.js' %}"></script>
+  <script src="{{BASE_URL}}{% static 'js/jquery-file-upload/jquery.fileupload.js' %}"></script>
+
+  {# FILE PAGE SCRIPTS #}
+  <script src="{{BASE_URL}}{% static 'js/drag-and-drop-upload.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+  <section id="main-content">
+    <section class="wrapper">
+
+      <div class="row">
+        <div class="col-lg-12 main-chart">
+
+          <!-- TITLE PAGE -->
+          <div class="border-head">
+            <h3>Upload HDF5 files</h3>
+          </div>
+
+          <!-- CLEAR DATABASE -->
+          <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-12">
+              <form method="post" action="{{BASE_URL}}{% url 'clear_database' %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="submit" class="btn btn-danger pull-right">
+                  <span class="glyphicon glyphicon-trash"></span> Clear Database
+                </button>
+              </form>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-12">
+              <form method="post" action="{{BASE_URL}}{% url 'upload_h5files' %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.path }}">
+                <button type="submit" class="btn btn-primary pull-right">
+                  <span class="glyphicon glyphicon-new-window"></span> Create ZIP File
+                </button>
+              </form>
+            </div>
+          </div>
+          <!-- END CLEAR DATABASE -->
+
+          <br/>
+
+          <!-- DROP ZIP FILE -->
+          <div class="row">
+            <div class="col-lg-12 col-md-1 col-sm-12">
+              <div style="margin-bottom: 20px;">
+                <form id="myform" method="post" enctype="multipart/form-data">                               
+                  <div class="well text-muted text-center" style="padding-top: 4rem; padding-bottom: 4rem;">
+                    <span class="glyphicon glyphicon-arrow-down" style="font-size: 4rem;"></span>
+                    <h3>Drop ZIP File Here to Upload</h3>
+                  </div>
+                  <input id="fileupload" type="file" name="file" multiple
+                      style="display: none;" data-url="{{BASE_URL}}{% url 'h5_upload' %}"
+                      data-form-data='{"csrfmiddlewaretoken": "{{ csrf_token }}"}'>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- END DROP ZIP FILE -->
+
+          <!-- ERROR IF FILE ALREADY EXIST -->
+          <div id="error" class="alert" role="alert">
+            <div id="result"></div>
+          </div>
+          <!-- END ERROR -->
+
+          <!-- LIST OF FILES -->
+          <div class="showback">
+          <table id="gallery" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Dates</th>
+                <th>Files</th>
+                <th>X</th>
+                <th>y</th>
+                <th>domain</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for input_data in input_files %}
+                <tr>
+                  <td>{{ input_data.uploaded_at }}</td>
+                  <td>{{ input_data.file.name }}</td>
+                  <td>{{ input_data.X }}</td>
+                  <td>{{ input_data.y }}</td>
+                  <td>{{ input_data.domain }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          </div>
+          <!-- END LIST OF FILES -->
+
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+{% endblock %}
