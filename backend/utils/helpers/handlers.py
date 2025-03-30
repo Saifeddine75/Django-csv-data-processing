@@ -63,26 +63,15 @@ def parse_csv_to_dict(file):
 def handle_dataset_file(file):
     """Handle uploaded file and instantiate dataset model with file data."""
     temp_path = default_storage.save('temp_file.csv', ContentFile(file.read()))
-    
-    # file.seek(0)  # Ensure we start at the beginning of the file
-    
-    # # Read CSV file
     column_data = parse_csv_to_dict(file)
-    # csv_file = TextIOWrapper(file, encoding='utf-8')
-    
-    # # Process the file from storage
-    # reader = csv.DictReader(csv_file)
-    # columns = ['timestamp', 'x', 'y', 'z']
     stats = {}
 
     for column in column_data.keys():
-        stats[column] = compute_stats(column_data[column])  # Compute stats for the column
-        # Compute norm (Euclidean distance)
+        stats[column] = compute_stats(column_data[column])
 
     norm = [np.sqrt(x**2 + y**2 + z**2) for x, y, z in zip(column_data['x'], column_data['y'], column_data['z'])]
     norm_stats = compute_stats(norm)
     
-    # Create and save the Dataset object
     Dataset.objects.create(
         title=f"{file.name}-{datetime.now().timestamp()}",
         timestamp=column_data['timestamp'], 

@@ -1,2 +1,5 @@
+[ ] Add doc string everywhere
 [ ] Ensure to use typing everywhere 
 [ ] Ruff quality code
+[ ] Use slug field
+[ ] Use class based form everywhere

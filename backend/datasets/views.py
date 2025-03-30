@@ -10,6 +10,10 @@ from datasets.models import Dataset, DatasetChart
 from .forms import FileUploadForm
 from utils.helpers.handlers import handle_dataset_file
 
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from .models import Dataset  # Ensure you import your Dataset model
 # Create your views here.
 
 
@@ -21,16 +25,11 @@ class FileUploadView(FormView):
 
     def form_valid(self, form):
         uploaded_file = self.request.FILES["file"]
-        # save_path = os.path.join(settings.MEDIA_ROOT, uploaded_file.name)  # Ensure it saves in MEDIA_ROOT
-        # # Save the file properly
-        # with open(save_path, "wb+") as destination:
-        #     for chunk in uploaded_file.chunks():
-        #         destination.write(chunk)
         handle_dataset_file(uploaded_file)
         messages.success(self.request, f"File '{uploaded_file.name}' uploaded successfully!")
         return super().form_valid(form)
 
-    def compute_chart(self, title, dataset_id:str=None):
+    def compute_chart(self, title:str, dataset_id:str=None):
         """Fetch the latest dataset and compute chart data."""
         if not dataset_id:
             dataset = Dataset.objects.last()
@@ -62,7 +61,8 @@ class FileUploadView(FormView):
         all_datasets = Dataset.objects.all()
 
         selected_dataset_id = self.request.GET.get("dataset_id")
-        selected_dataset = Dataset.objects.filter(id=selected_dataset_id).first()
+        selected_dataset = get_object_or_404(Dataset, id=selected_dataset_id)
+
         chart_data = self.compute_chart(title="dataset-{selected_dataset_id}", dataset_id=selected_dataset_id) if selected_dataset else None
 
         context.update({
@@ -72,3 +72,14 @@ class FileUploadView(FormView):
             "stats": chart_data.get('stats') if chart_data else None
         })
         return context
+        
+    
+
+def delete_dataset(request, id:int):
+    if request.method == "POST":
+        dataset = get_object_or_404(Dataset, id=id)
+
+        dataset.delete()  # Delete dataset from the database
+        messages.success(request, f"Dataset {id} deleted successfully!")
+
+
