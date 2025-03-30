@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils import timezone
 # TODO: use ArrayField
-# from django.contrib.postgres.fields import ArrayField
+# from django.contrib.po
+# stgres.fields import ArrayField
 
 class Dataset(models.Model):
     title = models.CharField(max_length=255, default=timezone.now)  # To store the title of the chart
@@ -19,7 +20,8 @@ class Dataset(models.Model):
 
 class DatasetChart(models.Model):
     title = models.CharField(max_length=255, default=timezone.now)  # To store the title of the chart
-    data = models.JSONField()  # To store the chart data as a JSON object
+    plot_data = models.JSONField(default=dict)  # To store the chart data as a JSON object
+    stats = models.JSONField(default=dict)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
