@@ -77,6 +77,24 @@
     <div id="container" style="width:100%; height:400px;"></div>
 
     <div class="chart-container">
+        {% if stats %}
+        <h2>Statistics:</h2>
+        {% for key, values in stats.axis.items %}
+            <h3>{{ key|upper }}-Axis</h3>
+            <ul>
+                {% for stat, value in values.items %}
+                    <li>{{ stat|capfirst }}: {{ value }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+        
+        <h3>Norm</h3>
+        <ul>
+            {% for stat, value in stats.norm.items %}
+                <li>{{ stat|capfirst }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}                                                 
         <!-- Highcharts container -->
         <canvas id="canvas" height="450" width="600">
             <div id="chart"></div>  
