@@ -1,4 +1,5 @@
 import csv
+from datetime import datetime
 from io import TextIOWrapper
 import numpy as np
 
@@ -80,9 +81,10 @@ def handle_dataset_file(file):
 
     norm = [np.sqrt(x**2 + y**2 + z**2) for x, y, z in zip(column_data['x'], column_data['y'], column_data['z'])]
     norm_stats = compute_stats(norm)
-        
+    
     # Create and save the Dataset object
     Dataset.objects.create(
+        title=f"{file.name}-{datetime.now().timestamp()}",
         timestamp=column_data['timestamp'], 
         x=column_data['x'], 
         y=column_data['y'], 

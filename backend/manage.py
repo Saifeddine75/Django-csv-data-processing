@@ -4,6 +4,7 @@ import os
 import sys
 
 
+# TODO: Add simple commands to manage database record
 def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'visualizer.settings')
