@@ -56,6 +56,17 @@
             </div>
             {% endif %}
         {% endfor %}
+        <div class="col-md-4">
+            <div class="stat-box card shadow-sm p-3">
+                <h3 class="text-center">Norm</h3>
+                <ul class="list-unstyled">
+                    {% for stat, value in stats.norm.items %}
+                        <li><strong>{{ stat|capfirst }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
     {% endif %}
     {% endif %}
 </div>
