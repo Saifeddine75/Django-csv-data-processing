@@ -3,6 +3,12 @@
 <!-- TODO Add delete button -->
 {% block content %}
 <div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
     <!-- File Upload Form -->
     <div class="card shadow-sm p-4">
         <h2 class="text-center">Upload your CSV file</h2>
