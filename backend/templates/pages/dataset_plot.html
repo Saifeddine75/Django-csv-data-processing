@@ -18,5 +18,21 @@
             <button type="submit" class="btn btn-primary">Upload</button>
         </form>
     </div>
+    <!-- Dataset Selection -->
+    {% if datasets %}
+    <div class="my-4">
+        <h3>Select a Dataset:</h3>
+        <form method="get">
+            {% csrf_token %} 
+            <select name="dataset_id" class="form-select" onchange="this.form.submit()">
+                {% for dataset in datasets %}
+                    <option value="{{ dataset.id }}" {% if dataset.id == selected_dataset.id %}selected{% endif %}>
+                        {{ dataset.title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
