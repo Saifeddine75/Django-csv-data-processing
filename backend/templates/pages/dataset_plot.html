@@ -1,0 +1,16 @@
+{% block title %}Dataset Plot{% endblock %}
+
+<!-- TODO Add delete button -->
+{% block content %}
+<div class="container">
+    <!-- File Upload Form -->
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center">Upload your CSV file</h2>
+        <form action="" method="post" enctype="multipart/form-data" class="text-center">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
