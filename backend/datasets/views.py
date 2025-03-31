@@ -56,11 +56,12 @@ class DatasetUploadView(FormView):
         )
         return plot_data
 
-    def delete_dataset(self, dataset_id:int=None):
-        if dataset_id:
-            dataset = Dataset.objects.filter(id=dataset_id).first()
-            dataset.delete()
-            messages.success(self.request, f"Dataset {dataset_id} deleted successfully!")
+    def delete_dataset(self, id:int=None):
+        if id:
+            dataset = Dataset.objects.filter(id=id).first()
+            if dataset is not None:
+                dataset.delete()
+                messages.success(self.request, f"Dataset {id} deleted successfully!")
         return redirect("upload_dataset")
 
     def get_context_data(self, **kwargs):

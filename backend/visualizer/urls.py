@@ -25,6 +25,7 @@ from datasets.views import DatasetUploadView#, delete_dataset
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('datasets/', DatasetUploadView.as_view(), name='upload_dataset'),
+    path("delete-dataset/<int:id>", DatasetUploadView.as_view(), name='delete_dataset'),
 ]
 
 if settings.DEBUG:
