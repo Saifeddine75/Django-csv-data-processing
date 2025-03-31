@@ -7,21 +7,8 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
 from datasets.models import Dataset
-from utils.exceptions.HandlerExceptions import (
-    # DataValidationError, 
-    DataProcessError
-)
+from utils.exceptions.HandlerExceptions import DataProcessError
 
-
-# # TODO: use classes (ask chatgpt)
-# def validate(value: float | int):
-#     if not value:
-#         raise(ValueError(f"Value should not empty: {value}"))
-#     try:
-#         return float(value)
-#     except ValueError as exc:
-#         raise DataValidationError(f"Invalid value for conversion: {value}\nerr: {exc}")
-    
 
 def compute_stats(values):
     if not values:
