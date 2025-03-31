@@ -3,6 +3,9 @@
 *.pyc
 __pycache__
 media
+staticfiles
+db.sqlite3
+
 
 # pyenv 
 .python-version 
@@ -14,3 +17,4 @@ media
 # Visual Studio Code # 
 .vscode/*
 .idea/*
+TODO
