@@ -40,8 +40,26 @@
             <canvas id="datasetChart" class="w-100"></canvas>
         </div>
     </div>
+    {% if stats %}
+    <div class="stats-container row">
+        {% for key, values in stats.axis.items %}
+            {% if key != 'timestamp' %}
+            <div class="col-md-4">
+                <div class="stat-box card shadow-sm p-3">
+                    <h3 class="text-center">{{ key|upper }}-Axis</h3>
+                    <ul class="list-unstyled">
+                        {% for stat, value in values.items %}
+                            <li><strong>{{ stat|capfirst }}:</strong> {{ value }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
     {% endif %}
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
@@ -49,4 +67,5 @@
     console.log("Chart Data:", chartData);
 </script>
 <script src="{% static 'visualizer/script.js' %}"></script>
+
 {% endblock %}
