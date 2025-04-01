@@ -1,0 +1,89 @@
+/* styles.css */
+body {
+    font-family: sans-serif;
+    margin: 20px auto;
+    text-align: center;
+    color: #333;
+}
+h1, h2, h3 {
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+form, .stats-container, .uploaded-section {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px auto;
+    background: #fafafa;
+}
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+.stat-box {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    min-width: 100px;
+}
+button, .toggle-btn {
+    border: none;
+    background: #007bff;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+.hidden {
+    display: none;
+}
+input[type="file"] {
+    margin: 10px 0;
+}
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+input[type="text"]:disabled {
+    background: #f0f0f0;
+    cursor: not-allowed;
+}
+input[type="text"]:disabled:focus {
+    border-color: #ccc;
+    outline: none;
+}
+input[type="text"]:disabled:hover {
+    background: #f0f0f0;
+}
+input[type="text"]:disabled:hover:focus {
+    border-color: #ccc;
+    outline: none;
+}
+.stats-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.stat-box {
+    background: #f8f9fa;
+    font-size: small;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+canvas {
+    height: 400px;
+    max-width: 100%;
+}
