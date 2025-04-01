@@ -1,0 +1,92 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block title %}Dataset Plot{% endblock %}
+
+<!-- TODO Add delete button -->
+{% block content %}
+<div class="container">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <!-- File Upload Form -->
+    <div class="card shadow-sm p-4">
+        <h2 class="text-center">Upload your CSV file</h2>
+        <form action="" method="post" enctype="multipart/form-data" class="text-center">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+    <!-- Dataset Selection -->
+    {% if datasets %}
+    <div class="my-4">
+        <h3>Select a Dataset:</h3>
+        <form method="get">
+            {% csrf_token %} 
+            <select name="dataset_id" class="form-select" onchange="this.form.submit()">
+                {% for dataset in datasets %}
+                    <option value="{{ dataset.id }}" {% if dataset.id == selected_dataset.id %}selected{% endif %}>
+                        {{ dataset.title }}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+    {% if selected_dataset %}
+    <form action="{% url 'delete_dataset' selected_dataset.id %}" method="post" class="d-inline">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger my-3" 
+                onclick="return confirm('Are you sure you want to delete this dataset?');">
+            🗑 Delete
+        </button>
+    </form>
+{% endif %}
+    <div class="container">
+        <div class="mx-auto" style="width: 800px; height: 400px; overflow: hidden;">
+            <canvas id="datasetChart" class="w-100"></canvas>
+        </div>
+    </div>
+    {% if stats %}
+    <div class="stats-container row">
+        {% for key, values in stats.axis.items %}
+            {% if key != 'timestamp' %}
+            <div class="col-md-4">
+                <div class="stat-box card shadow-sm p-3">
+                    <h3 class="text-center">{{ key|upper }}-Axis</h3>
+                    <ul class="list-unstyled">
+                        {% for stat, value in values.items %}
+                            <li><strong>{{ stat|capfirst }}:</strong> {{ value }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        {% endfor %}
+        <div class="col-md-4">
+            <div class="stat-box card shadow-sm p-3">
+                <h3 class="text-center">Norm</h3>
+                <ul class="list-unstyled">
+                    {% for stat, value in stats.norm.items %}
+                        <li><strong>{{ stat|capfirst }}:</strong> {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endif %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    var chartData = JSON.parse('{{ chart_data|escapejs }}');
+    console.log("Chart Data:", chartData);
+</script>
+<script src="{% static 'visualizer/script.js' %}"></script>
+
+{% endblock %}
