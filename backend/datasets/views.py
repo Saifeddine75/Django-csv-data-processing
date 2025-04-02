@@ -3,13 +3,13 @@ import json
 
 from django.contrib import messages
 from django.views.generic.edit import FormView
+from django.core.serializers import serialize
 
 from datasets.models import Dataset, DatasetChart
 
 # from .forms import FileFieldForm
 from .forms import FileUploadForm
 from utils.helpers.handlers import handle_dataset_file
-
 
 from django.shortcuts import get_object_or_404, redirect
 from django.http import JsonResponse
@@ -66,29 +66,19 @@ class DatasetUploadView(FormView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         all_datasets = Dataset.objects.all()
+        selected_dataset = []
 
         selected_dataset_id = self.request.GET.get("dataset_id")
-        selected_dataset = Dataset.objects.filter(id=selected_dataset_id).first()
+        if selected_dataset_id:
+            selected_dataset = Dataset.objects.get(id=selected_dataset_id)
 
         chart_data = self.compute_dataset_chart(title="dataset-{selected_dataset_id}", dataset_id=selected_dataset_id) if selected_dataset else None
 
         context.update({
-            "datasets": all_datasets,
-            "selected_dataset": selected_dataset,
+            "datasets": serialize("json", all_datasets),
+            "selected_dataset": serialize("json", selected_dataset),
             "chart_data": json.dumps(chart_data) if chart_data else None,
             "stats": chart_data.get('stats') if chart_data else None
         })
         return context
     
-
-        
-    
-
-# def delete_dataset(request, id:int):
-#     if request.method == "POST":
-#         dataset = get_object_or_404(Dataset, id=id)
-
-#         dataset.delete()  # Delete dataset from the database
-#         messages.success(request, f"Dataset {id} deleted successfully!")
-
-

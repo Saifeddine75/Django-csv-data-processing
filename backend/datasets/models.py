@@ -1,17 +1,15 @@
 from django.db import models
 from django.utils import timezone
-# TODO: use ArrayField
-# from django.contrib.po
-# stgres.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField
 
 class Dataset(models.Model):
     title = models.CharField(max_length=255, default=timezone.now)  # To store the title of the chart
-    timestamp = models.JSONField(models.FloatField(), default=list)  # To store the timestamp values
-    x = models.JSONField(models.FloatField(), default=list)
-    y = models.JSONField(models.FloatField(), default=list)
-    z = models.JSONField(models.FloatField(), default=list)
-    norm = models.JSONField(models.FloatField(), default=list)
-    stats = models.JSONField(default=dict)
+    timestamp = ArrayField(models.FloatField(), default=list)  # To store the timestamp values
+    x = ArrayField(models.FloatField(), default=list)
+    y = ArrayField(models.FloatField(), default=list)
+    z = ArrayField(models.FloatField(), default=list)
+    norm = ArrayField(models.FloatField(), default=list)
+    stats = models.JSONField(models.FloatField(), default=dict)
     created_at = models.DateTimeField(default=timezone.now) 
 
     def __str__(self):
@@ -20,8 +18,8 @@ class Dataset(models.Model):
 
 class DatasetChart(models.Model):
     title = models.CharField(max_length=255, default=timezone.now)  # To store the title of the chart
-    plot_data = models.JSONField(default=dict)  # To store the chart data as a JSON object
-    stats = models.JSONField(default=dict)
+    plot_data = ArrayField(models.FloatField(), default=dict)  # To store the chart data as a JSON object
+    stats = ArrayField(models.FloatField(), default=dict)
     created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
