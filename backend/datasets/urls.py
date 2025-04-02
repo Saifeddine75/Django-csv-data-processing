@@ -1,10 +1,7 @@
 from django.urls import path
-
-from . import views
-
-app_name = "datasets"
+from .views import DatasetUploadView
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("upload/", views.BasicUploadView.as_view(), name="create"),
+    path('', DatasetUploadView.as_view(), name='upload_dataset'),  # Base datasets URL
+    path("delete-dataset/<int:id>/", DatasetUploadView.delete_dataset, name="delete_dataset"),
 ]

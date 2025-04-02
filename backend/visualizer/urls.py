@@ -19,13 +19,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
 
-from datasets.views import DatasetUploadView#, delete_dataset
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('datasets/', DatasetUploadView.as_view(), name='upload_dataset'),
-    path("delete-dataset/<int:id>", DatasetUploadView.delete_dataset, name="delete_dataset"),
+    path('datasets/', include('datasets.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
