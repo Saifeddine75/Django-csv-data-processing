@@ -7,7 +7,6 @@ from django.core.serializers import serialize
 
 from datasets.models import Dataset, DatasetChart
 
-# from .forms import FileFieldForm
 from .forms import FileUploadForm
 from utils.helpers.handlers import handle_dataset_file
 
