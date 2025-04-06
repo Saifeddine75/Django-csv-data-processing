@@ -11,8 +11,7 @@ from datasets.models import Dataset, DatasetChart
 from .forms import FileUploadForm
 from utils.helpers.handlers import handle_dataset_file
 
-from django.shortcuts import get_object_or_404, redirect
-from django.http import JsonResponse
+from django.shortcuts import redirect
 from .models import Dataset  # Ensure you import your Dataset model
 # Create your views here.
 
