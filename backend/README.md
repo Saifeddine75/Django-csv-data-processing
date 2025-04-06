@@ -30,7 +30,7 @@ or
 
 ## Option 1: Deploy with default django dev web server (Only recommanded for local developpement)
 python manage.py runserver 8000
-
+ 
 ## Option 2: Deploy with docker compose
 docker-compose up --build 
 
