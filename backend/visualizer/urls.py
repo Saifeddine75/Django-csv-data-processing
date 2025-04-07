@@ -18,15 +18,14 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
-
-from datasets.views import DatasetUploadView#, delete_dataset
+from django.views.generic import RedirectView
 
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='/datasets/', permanent=False)),
     path('admin/', admin.site.urls),
-    path('datasets/', DatasetUploadView.as_view(), name='upload_dataset'),
-    path("delete-dataset/<int:id>", DatasetUploadView.as_view(), name='delete_dataset'),
-]
+    path('datasets/', include('datasets.urls')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     import debug_toolbar

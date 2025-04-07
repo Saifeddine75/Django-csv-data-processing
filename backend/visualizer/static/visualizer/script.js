@@ -34,7 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        animation: false, // Improves performance
         scales: {
           x: {
             type: "linear", // Properly handle timestamps

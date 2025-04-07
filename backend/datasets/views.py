@@ -3,19 +3,11 @@ import json
 
 from django.contrib import messages
 from django.views.generic.edit import FormView
+from django.shortcuts import redirect
 
+from datasets.forms import FileUploadForm
 from datasets.models import Dataset, DatasetChart
-
-# from .forms import FileFieldForm
-from .forms import FileUploadForm
 from utils.helpers.handlers import handle_dataset_file
-
-
-from django.shortcuts import get_object_or_404, redirect
-from django.http import JsonResponse
-from .models import Dataset  # Ensure you import your Dataset model
-# Create your views here.
-
 
 
 class DatasetUploadView(FormView):
@@ -56,20 +48,21 @@ class DatasetUploadView(FormView):
         )
         return plot_data
 
-    def delete_dataset(self, id:int=None):
-        if id:
-            dataset = Dataset.objects.filter(id=id).first()
-            if dataset is not None:
-                dataset.delete()
-                messages.success(self.request, f"Dataset {id} deleted successfully!")
+    def delete_dataset(self, dataset_id:int=None):
+        if dataset_id:
+            dataset = Dataset.objects.filter(id=dataset_id).first()
+            dataset.delete()
+            messages.success(self.request, f"Dataset {dataset_id} deleted successfully!")
         return redirect("upload_dataset")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         all_datasets = Dataset.objects.all()
+        selected_dataset = []
 
         selected_dataset_id = self.request.GET.get("dataset_id")
-        selected_dataset = Dataset.objects.filter(id=selected_dataset_id).first()
+        if selected_dataset_id:
+            selected_dataset = Dataset.objects.get(id=selected_dataset_id)
 
         chart_data = self.compute_dataset_chart(title="dataset-{selected_dataset_id}", dataset_id=selected_dataset_id) if selected_dataset else None
 
@@ -81,15 +74,3 @@ class DatasetUploadView(FormView):
         })
         return context
     
-
-        
-    
-
-# def delete_dataset(request, id:int):
-#     if request.method == "POST":
-#         dataset = get_object_or_404(Dataset, id=id)
-
-#         dataset.delete()  # Delete dataset from the database
-#         messages.success(request, f"Dataset {id} deleted successfully!")
-
-

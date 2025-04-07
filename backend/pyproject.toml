@@ -3,13 +3,13 @@ name = "backend"
 version = "1.0"
 requires-python = ">=3.11"
 dependencies = [
+  "dotenv",
   "dj-database-url>=2.2",
   "django>=3.2.*,<4.0",
   "gunicorn>=23.0",
   "mypy>=1.15",
   "psycopg2-binary>=2.9",
   "whitenoise>=6.9",
-  "django-debug-toolbar>=4.3.0",
 ]
 
 [dependency-groups]
