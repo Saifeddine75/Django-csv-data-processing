@@ -13,7 +13,7 @@ class Dataset(models.Model):
     created_at = models.DateTimeField(default=timezone.now) 
 
     def __str__(self):
-        return f"Data from {self.timestamp} (x: {self.x}, y: {self.y}, z: {self.z})"
+        return f"Data from {len(self.timestamp)} (x: {len(self.x)}, y: {len(self.y)}, z: {len(self.z)})"
     
 
 class DatasetChart(models.Model):
